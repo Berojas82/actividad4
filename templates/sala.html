@@ -1,0 +1,34 @@
+{% extends 'base.html' %} {% block content %}
+<div class="caja-mensaje">
+    <h2>Sala de chat: {{sala}}</h2>
+    <div class="mensajes" id="mensajes"></div>
+    <div class="inputs">
+        <input type="texto" rows="3" placeholder="Escribe tu mensaje" name="mensaje" id="mensaje"/>
+        <button type="boton" name="enviar" id="env-btn" onclick="enviarMensaje()">
+            Enviar
+        </button>
+    </div>
+</div>
+<script type="text/javascript">
+    var socketio = io();
+
+    const mensajes = document.getElementById("mensajes")
+
+    const crearMensaje = (nombre, msg) => {
+        const content = `
+        <div>
+            <pan>
+                <strong>${nombre}</strong>: ${msg}
+            </span>
+            <span class="muted"
+                ${new Date().toLocaleDateString()}
+            </span>
+        </div>
+        `
+    }
+
+    const enviarMensaje = () => {
+        console.log("enviar");
+    };
+</script>
+{% endblock %}
