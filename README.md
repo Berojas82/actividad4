@@ -24,4 +24,34 @@
 <li>Random para el m&eacute;todo choice() que permite otorgar una numeraci&oacute;n de sala aleatoria para cada usuario quen desee crear una nueva sala.</li>
 <li>Flask-SocketIO para establecer la comunicaci&oacute;n entre los clientes y el servidor.</li>
 </ul>
+
+<p>En el presente c&oacute;digo se presenta una aplicaci&oacute;n web realizada a trav&eacute;s de Flask empleando Socket.IO para las comunicaciones entre los clientes.</p>
+<p>Las funciones que realiza el programa se clasifican de la siguiente manera:</p>
+<ol>
+<li>Importaciones y ajustes:
+<ul>
+<li>Importa los m&oacute;dulos necesarios.</li>
+<li>Inicia el&nbsp;<em>framework</em> de Flask y el Socket.IO.</li>
+<li>Configura un diccionario para almacenar informaci&oacute;n.</li>
+</ul>
+</li>
+<li>Home:
+<ul>
+<li>Borra las sesiones.</li>
+<li>Maneja las peticiones POST para unirse o crear una sala de chat.</li>
+<li>Valida el c&oacute;digo de grupo y redirecciona al usuario a la sala de chat.</li>
+</ul>
+</li>
+<li>Sala:
+<ul>
+<li>Revisa si la sesi&oacute;n es v&aacute;lida y renderiza la sala de chat.</li>
+</ul>
+</li>
+<li>Funcionalidades de Socket.IO:
+<ul>
+<li>Gestiona los mensajes, conexiones y desconexiones.</li>
+<li>Gestiona las membres&iacute;as de las salas y la emisi&oacute;n de los mensaje.</li>
+</ul>
+</li>
+</ol>
 <p>Se tiene la expectativa que una vez se abra la p&aacute;gina principal, el usuario podr&aacute; explorar el contenido de la pagina web, y cuando se vaya a dirigir a la secci&oacute;n de la sala de chat, tenga que ingresar su nombre y crear una sala, o unirse a ella. Una vez dentro, puede interactuar con otros usuarios.</p>
