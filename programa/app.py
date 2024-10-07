@@ -20,9 +20,17 @@ def generate_unique_code(length):
 
     return cod
 
-
-@app.route("/", methods=["POST", "GET"])
+@app.route("/home")
+@app.route("/")
 def home():
+    return render_template("home.html")
+
+@app.route("/popcorn")
+def popcorn():
+    return render_template("popcorn.html")
+
+@app.route("/chat", methods=["POST", "GET"])
+def chat():
     session.clear()
     if request.method =="POST":
         nombre =request.form.get("nombre")
@@ -31,29 +39,29 @@ def home():
         crear = request.form.get("crear", False)
 
         if not nombre:
-            return render_template ("home.html", error="Por favor, ingresa un nombre.", cod=cod, nombre=nombre)
+            return render_template ("chat.html", error="Por favor, ingresa un nombre.", cod=cod, nombre=nombre)
         
         if unir != False and not cod:
-            return render_template ("home.html", error="Por favor, ingresa un código de sala.", cod=cod, nombre=nombre)
+            return render_template ("chat.html", error="Por favor, ingresa un código de sala.", cod=cod, nombre=nombre)
 
         sala=cod 
         if crear != False:
             sala = generate_unique_code(4)
             salas[sala]={"miembros": 0, "mensajes": []}
         elif cod not in salas:
-            return render_template ("home.html", error="La sala no existe, intenta de nuevo.", cod=cod, nombre=nombre)
+            return render_template ("chat.html", error="La sala no existe, intenta de nuevo.", cod=cod, nombre=nombre)
         
         session["sala"] = sala
         session["nombre"] = nombre
         return redirect(url_for("sala"))
 
-    return render_template("home.html")
+    return render_template("chat.html")
 
 @app.route("/sala")
 def sala():
     sala= session.get("sala")
     if sala is None or session.get("nombre") is None or sala not in salas:
-        return redirect(url_for("home"))
+        return redirect(url_for("chat"))
     
     return render_template ("sala.html", cod=sala, mensajes=salas[sala]["mensajes"])
 

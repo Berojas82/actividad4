@@ -1,20 +1,19 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %} Home page {% endblock %}
 {% block content %}
-<form method="post" class="buttons">
-    <h3>Por favor ingresa la sala de chat</h3>
-    <div>
-        <label>Nombre:</label>
-        <input type="text" placeholder="Escoge un nombre" name="nombre" value="{{nombre}}"/>
-    </div>
-    <div class="join">
-        <input type="text" placeholder="Ingresa un número de sala" name="cod" value="{{cod}}"/>
-        <button type="submit" name="unir">Únete a una sala</button>
-    </div>
-    <button type="submit" name="crear" class="create-btn">Crea una sala</button>
-    {% if error %}
-    <ul>
-        <li>{{error}}</li>
-    </ul>
-    {% endif %}
-</form>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='styles/homestyle.css')}}">
+</head>
+<body>
+    <h1 style="text-align: center;">¡Bienvenido a la mejor página del mundo mundial!</h1>
+    <p style="text-align: center;">
+        <div class="video-container">
+            <iframe width="560" height="315"
+                src="https://www.youtube.com/embed/dNIWPso9ijA?autoplay=1"
+                allow="autoplay; encrypted-media" allowfullscreen>
+            ></iframe>
+        </div>
+    </p>
+</body>
 {% endblock %}
