@@ -54,7 +54,20 @@ def sala():
     sala= session.get("sala")
     if sala is None or session.get("nombre") is None or sala not in salas:
         return redirect(url_for("home"))
-    return render_template ("sala.html")
+    
+    return render_template ("sala.html", cod=sala, mensajes=salas[sala]["mensajes"])
+
+@socketio.on("mensaje")
+def mensaje(data):
+    sala = session.get("sala")
+    if sala not in salas:
+        return
+    
+    content = {"nombre": session.get ("nombre"), "mensaje": data["data"]}
+
+    send(content, to=sala)
+    salas[sala]["mensajes"].append(content)
+    print(f"{session.get("nombre")} said: {data["data"]}")
 
 @socketio.on("connect")
 def connect(auth):
@@ -68,20 +81,22 @@ def connect(auth):
     
     join_room(sala)
     send({"nombre": nombre, "mensaje": "ha entrado a la sala"}, to=sala)
+    socketio.emit("usuario_conectado", {"nombre": nombre}, to=sala)
     salas[sala]["miembros"] += 1
     print(f"{nombre} se unió a la sala {sala}")
-    
+
 @socketio.on("disconnect")
 def disconnect():
     sala = session.get("sala")
-    nombre = session.get ("nombre")
+    nombre = session.get("nombre")
     leave_room(sala)
 
     if sala in salas:
         salas[sala]["miembros"] -= 1
         if salas[sala]["miembros"] <= 0:
             del salas[sala]
-    send({"nombre": nombre, "mensaje": "ha salido la sala"}, to=sala)
+    send({"nombre": nombre, "mensaje": "ha salido de la sala"}, to=sala)
+    socketio.emit("usuario_desconectado", {"nombre": nombre}, to=sala)
     print(f"{nombre} salió de la sala {sala}")
 
 

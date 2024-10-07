@@ -1,10 +1,10 @@
 {% extends 'base.html' %} {% block content %}
 <div class="caja-mensaje">
-    <h2>Sala de chat: {{sala}}</h2>
+    <h2>Sala de chat: {{cod}}</h2>
     <div class="mensajes" id="mensajes"></div>
     <div class="inputs">
-        <input type="texto" rows="3" placeholder="Escribe tu mensaje" name="mensaje" id="mensaje"/>
-        <button type="boton" name="enviar" id="env-btn" onclick="enviarMensaje()">
+        <input type="text" rows="3" placeholder="Escribe tu mensaje" name="mensaje" id="mensaje"/>
+        <button type="button" name="enviar" id="env-btn" onClick="enviarMensaje()">
             Enviar
         </button>
     </div>
@@ -14,21 +14,44 @@
 
     const mensajes = document.getElementById("mensajes")
 
-    const crearMensaje = (nombre, msg) => {
+    const crearMensaje = (nombre, msg, fecha) => {
         const content = `
-        <div>
-            <pan>
+        <div class="text">
+            <span>
                 <strong>${nombre}</strong>: ${msg}
             </span>
-            <span class="muted"
-                ${new Date().toLocaleDateString()}
+            <span class="muted">
+                ${fecha}
             </span>
         </div>
-        `
-    }
+        `;
+        mensajes.innerHTML += content;
+    };
+
+    socketio.on("mensaje", (data) => {
+        crearMensaje(data.nombre, data.mensaje, new Date().toLocaleString());
+    });
+
+    socketio.on("usuario_conectado", (data) => {
+        crearMensaje("Sistema", `${data.nombre} ha entrado a la sala`, new Date().toLocaleString());
+    });
+
+    socketio.on("usuario_desconectado", (data) => {
+        crearMensaje("Sistema", `${data.nombre} ha salido de la sala`, new Date().toLocaleString());
+    });
 
     const enviarMensaje = () => {
-        console.log("enviar");
+        const mensaje =document.getElementById("mensaje");
+        if (mensaje.value == "") return;
+        const msgContent = mensaje.value;
+        socketio.emit("mensaje", {data: mensaje.value});
+        crearMensaje("Tú", msgContent, new Date().toLocaleString());
+        mensaje.value = "";
     };
 </script>
+{% for msg in mensajes %}
+<script type="text/javascript">
+    crearMensaje("{{msg.nombre}}", "{{msg.mensaje}}", "{msg.fecha}");
+</script>
+{% endfor %}
 {% endblock %}
